@@ -1,7 +1,8 @@
 package tracker;
 
-public class Main {
+import tracker.ui.TextUserInterface;
 
+public class Main {
     public static void main(String[] args) {
         TextUserInterface ui = new TextUserInterface();
         ui.start();
