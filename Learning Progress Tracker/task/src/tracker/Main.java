@@ -1,10 +1,10 @@
 package tracker;
 
-import tracker.ui.TextUserInterface;
+import tracker.app.AppLogic;
 
 public class Main {
     public static void main(String[] args) {
-        TextUserInterface ui = new TextUserInterface();
-        ui.start();
+        AppLogic app = new AppLogic();
+        app.start();
     }
 }
