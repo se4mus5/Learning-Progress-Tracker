@@ -1,5 +1,6 @@
 package tracker.app;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Student {
@@ -7,7 +8,7 @@ public class Student {
     private final String firstName;
     private final String lastName;
     private final String email;  // Student identity = email, reflected by hashCode() and equals()
-    private int[] points;
+    private final int[] points;
 
     public Student(String id, String firstName, String lastName, String email) {
         this.id = id;
@@ -20,22 +21,22 @@ public class Student {
     public String getId() {
         return id;
     }
-    public String getFirstName() {
-        return firstName;
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public String getEmail() {
-        return email;
-    }
     public int[] getPoints() {
         return points;
     }
-    public void setPoints(String[] points) {
-        for (int i = 0; i < points.length; i++) {
-            this.points[i] += Integer.parseInt(points[i]); // InputValidators.isPointsInputValid() guarantees no exception
-        }
+
+    public int getPointsForCourse(String courseName) { // courseName is validated, will not trigger to exception
+        return points[Course.valueOf(courseName).ordinal()];
+    }
+
+    public double getProgress(String courseName) { // courseName is validated, will not trigger to exception
+        if (getPointsForCourse(courseName) == 0) return 0; // avoid div by 0
+        return 100 * getPointsForCourse(courseName) / (double) Course.valueOf(courseName).getPointsRequired();
+    }
+    public void setPoints(int[] points) {
+        // InputValidators.isPointsInputValid() guarantees no exception
+        // setting each element instead of reassigning array to keep the 'points' variable immutable
+        Arrays.setAll(this.points, i -> this.points[i] + points[i]); // model: Arrays.setAll(int[] array, IntUnaryOperator);
     }
 
     @Override
@@ -43,11 +44,11 @@ public class Student {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return email.equals(student.email);
+        return email.equals(student.email); // student identity is email
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(email);
-    }
+    } // student identity is email
 }

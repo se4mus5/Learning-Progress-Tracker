@@ -1,17 +1,19 @@
 package tracker.ui;
 
 import tracker.app.AppLogic;
+import tracker.app.Student;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
 import static tracker.ui.InputValidators.*;
 
 public class TextUserInterface {
-    private final AppLogic appLogic;
+    private final AppLogic app;
     private final Scanner scanner = new Scanner(System.in);
-    public TextUserInterface(AppLogic appLogic) {
-        this.appLogic = appLogic;
+    public TextUserInterface(AppLogic app) {
+        this.app = app;
     }
 
     public void start() {
@@ -24,6 +26,7 @@ public class TextUserInterface {
                 case "add points" -> updatePoints();
                 case "list" -> listStudents();
                 case "find" -> findStudent();
+                case "statistics" -> statistics();
                 case "back" -> System.out.println("Enter 'exit' to exit the program");
                 default -> System.out.println("Error: unknown command!");
             }
@@ -41,7 +44,7 @@ public class TextUserInterface {
                 System.out.printf("Total %d students have been added.\n", entryCount);
                 break;
             } else if (isStudentDataInputValid(studentCredentialsEntered)) {
-                boolean success = appLogic.addStudent(studentCredentialsEntered);
+                boolean success = app.addStudent(studentCredentialsEntered);
                 if (success) {
                     System.out.println("The student has been added.");
                     entryCount++;
@@ -53,12 +56,12 @@ public class TextUserInterface {
     }
 
     private void listStudents() {
-        Set<String> studentIds = appLogic.listStudents();
+        Set<String> studentIds = app.listStudents();
         if (studentIds.isEmpty()) {
             System.out.println("No students found");
         } else {
             System.out.println("Students:");
-            for (String id : appLogic.listStudents()) {
+            for (String id : app.listStudents()) {
                 System.out.println(id);
             }
         }
@@ -71,7 +74,7 @@ public class TextUserInterface {
             if (studentIdEntered.equals("back")) {
                 break;
             } else {
-                System.out.println(appLogic.findStudent(studentIdEntered));
+                System.out.println(app.findStudent(studentIdEntered));
             }
         }
     }
@@ -83,8 +86,8 @@ public class TextUserInterface {
             if (pointsEntered.equals("back")) {
                 break;
             } else if (isPointsInputValid(pointsEntered)) {
-                String id = pointsEntered.substring(0, pointsEntered.indexOf("\s"));
-                boolean success = appLogic.updatePointsOfStudent(pointsEntered);
+                String id = pointsEntered.substring(0, pointsEntered.indexOf(" "));
+                boolean success = app.updatePointsOfStudent(pointsEntered);
                 if (success) {
                     System.out.println("Points updated.");
                 } else {
@@ -96,4 +99,35 @@ public class TextUserInterface {
         }
     }
 
+    private void statistics() {
+        System.out.println("Type the name of a course to see details or 'back' to quit:");
+        String[] summaryStats = app.summaryStats();
+        System.out.printf("""
+                             Most popular: %s
+                             Least popular: %s
+                             Highest activity: %s
+                             Lowest activity: %s
+                             Easiest course: %s
+                             Hardest course: %s
+                             """, (Object[]) summaryStats); // casting to suppress warning about varargs vs single-arg
+        while (true) {
+            String courseNameEntered = scanner.nextLine();
+            if (courseNameEntered.equals("back")) {
+                break;
+            } else {
+                if (isCourseNameInputValid(courseNameEntered)) {
+                    List<Student> topStudents = app.topStudents(courseNameEntered);
+
+                    System.out.println(courseNameEntered);
+                    System.out.println("id     points   completed");
+                    if (!topStudents.isEmpty()) {
+                        topStudents.forEach(s -> System.out.printf("%-6s %-8s %-2.1f%%\n", // %%: literal %
+                                s.getId(), s.getPointsForCourse(courseNameEntered), s.getProgress(courseNameEntered)));
+                    }
+                } else {
+                    System.out.println("Unknown course.");
+                }
+            }
+        }
+    }
 }
