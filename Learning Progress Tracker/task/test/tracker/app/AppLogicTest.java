@@ -1,5 +1,6 @@
 package tracker.app;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -7,9 +8,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppLogicTest {
-    // TODO add @DisplayName, convert some to ParametrizedTest
-
     @Test
+    @DisplayName("Most popular course, case: only one course ranks as most popular")
     void mostPopularCourseTestSingleCourseMostPopular() {
         AppLogic app = new AppLogic();
         app.addStudent("Kis Kata kiskata@cmail.com");
@@ -23,6 +23,7 @@ class AppLogicTest {
     }
 
     @Test
+    @DisplayName("Most popular course, case: multiple courses rank as most popular")
     void mostPopularCourseTestMultipleCoursesMostPopular() {
         AppLogic app = new AppLogic();
         app.addStudent("Kis Kata kiskata@cmail.com");
@@ -36,6 +37,7 @@ class AppLogicTest {
     }
 
     @Test
+    @DisplayName("Summary stats with no ties")
     void summaryStatsTestGeneral() {
         AppLogic app = new AppLogic();
         app.addStudent("Kis Kata kiskata@cmail.com");
@@ -55,6 +57,7 @@ class AppLogicTest {
     }
 
     @Test
+    @DisplayName("Summary stats, case: when everybody achieved the same results")
     void summaryStatsTestAllPointsEntriesEqual() {
         AppLogic app = new AppLogic();
         app.addStudent("Kis Kata kiskata@cmail.com");
@@ -74,6 +77,7 @@ class AppLogicTest {
     }
 
     @Test
+    @DisplayName("Top students, case: ties between some students and no progress for one student on one course")
     void topStudentsTestWithTiesAndNoProgress() {
         AppLogic app = new AppLogic();
         app.addStudent("Kis Kata kiskata@cmail.com");

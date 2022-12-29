@@ -27,6 +27,7 @@ public class TextUserInterface {
                 case "list" -> listStudents();
                 case "find" -> findStudent();
                 case "statistics" -> statistics();
+                case "notify" -> notifyStudents();
                 case "back" -> System.out.println("Enter 'exit' to exit the program");
                 default -> System.out.println("Error: unknown command!");
             }
@@ -129,5 +130,21 @@ public class TextUserInterface {
                 }
             }
         }
+    }
+
+    private void notifyStudents() {
+        List<String[]> studentsToNotify = app.notifyStudents();
+        for (String[] emailParameters : studentsToNotify) {
+            System.out.printf("""
+                    To: %s
+                    Re: Your Learning Progress
+                    Hello, %s You have accomplished our %s course!
+                    """, emailParameters);
+        }
+        System.out.printf("Total %d students have been notified.",
+                studentsToNotify.stream()
+                        .map(s -> s[0])
+                        .distinct()
+                        .count());
     }
 }

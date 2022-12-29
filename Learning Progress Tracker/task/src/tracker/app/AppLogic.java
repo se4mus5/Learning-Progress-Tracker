@@ -201,4 +201,19 @@ public class AppLogic {
 
         return topStudents;
     }
+
+    public List<String[]> notifyStudents() {
+        List<String[]> studentsToNotify = new ArrayList<>();
+        for (Student s : studentDB.values()) {
+            if (!s.isNotified()) {
+                for (Course c : Course.values()) {
+                    if (s.getPointsForCourse(c.name()) >= c.getPointsRequired()) {
+                        studentsToNotify.add(new String[]{s.getEmail(), s.getFullName(), c.name()}); // supply content in order needed by email template
+                    }
+                }
+            }
+            s.setNotified(true);
+        }
+        return studentsToNotify;
+    }
 }

@@ -13,12 +13,12 @@ Topics/
 build/
 out/
 
-# Ignore transient Grade files
-.gradle/
-
 # Ignore non-project-related descriptor files
 *.yaml
 ########################################################
+
+# Ignore Gradle temporary files
+.gradle/
 
 # Ignore OS specific files
 .DS_Store
@@ -47,10 +47,8 @@ htmlReport/
 *.zip
 *.tar.gz
 *.rar
-
-# PKI files
-publicKey
-privateKey
+# do not ignore gradlew .jar
+!gradle/wrapper/gradle-wrapper.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

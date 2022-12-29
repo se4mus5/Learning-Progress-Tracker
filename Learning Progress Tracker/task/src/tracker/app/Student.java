@@ -9,6 +9,7 @@ public class Student {
     private final String lastName;
     private final String email;  // Student identity = email, reflected by hashCode() and equals()
     private final int[] points;
+    private boolean notified;
 
     public Student(String id, String firstName, String lastName, String email) {
         this.id = id;
@@ -18,11 +19,20 @@ public class Student {
         this.points = new int[4];
     }
 
-    public String getId() {
-        return id;
+    public String getEmail() { return email; }
+
+    public String getFullName() { return firstName + " " + lastName; }
+
+    public String getId() { return id; }
+
+    public int[] getPoints() { return points; }
+
+    public boolean isNotified() {
+        return notified;
     }
-    public int[] getPoints() {
-        return points;
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
     }
 
     public int getPointsForCourse(String courseName) { // courseName is validated, will not trigger to exception
